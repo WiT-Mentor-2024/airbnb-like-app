@@ -56,7 +56,14 @@ pip list
 
 ### 6. Start the Server
 
+```
+uvicorn main:app --reload
+```
+or
 
+```
+fastapi dev main.py
+```
 
 ### 7. Open the browser 
 
