@@ -6,7 +6,7 @@ This is a FastAPI application that can be run locally for development and testin
 
 ## Prerequisites
 
-- Python 3.7 or higher
+- Python 3.10 or higher
 - Virtual environment 
 
 ## Installation
