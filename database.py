@@ -10,7 +10,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(
     DATABASE_URL, echo=True
-)  # Функция создает объект engine, который является основным интерфейсом для взаимодействия с базой данныхб echo=True: включает вывод SQL-запросов в консоль для отладки
+)  # Функция создает объект engine, который является основным интерфейсом для взаимодействия с базой данных, echo=True: включает вывод SQL-запросов в консоль для отладки
 
 SessionLocal = sessionmaker(
     autocommit=False, autoflush=False, bind=engine
