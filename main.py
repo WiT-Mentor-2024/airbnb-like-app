@@ -4,22 +4,26 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from models import User
-from utils import hash_password
 
 from database import SessionLocal, engine
 
 from schemas import UserCreate, UserResponse
+from error_messages import EMAIL_ALREADY_REGISTERED
 
 
 app = FastAPI()
 
 
-def get_db():  # получить db сессию
+def get_db() -> Session:  # получить db сессию
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+
+def is_email_registered(db, email: str) -> bool:
+    return db.query(User).filter(User.email == email).first() is not None
 
 
 @app.get("/")
@@ -30,23 +34,9 @@ def read_root():
 @app.post("/register", response_model=UserResponse)
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
 
-    if db.query(User).filter(User.email == user.email).first():
-        raise HTTPException(status_code=400, detail="Email already registered")
+    if User.is_email_registered(db, user.email):
+        raise HTTPException(status_code=400, detail=EMAIL_ALREADY_REGISTERED)
 
-    hashed_password = hash_password(user.password)
-
-    new_user = User(
-        username=user.username,
-        email=user.email,
-        hashed_password=hashed_password,
-        first_name=user.first_name,
-        last_name=user.last_name,
-        address=user.address,
-        phone_number=user.phone_number,
-    )
-
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+    new_user = User.create_user(db, user)
 
     return new_user

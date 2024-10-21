@@ -2,6 +2,8 @@ from sqlmodel import SQLModel, create_engine, text
 from dotenv import load_dotenv
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError
+from error_messages import DATABASE_ERROR, UNEXPECTED_ERROR
 import os
 
 load_dotenv()
@@ -32,8 +34,12 @@ def check_tables():
 
         tables = [row.table_name for row in result]
         print(tables)
+
+    except SQLAlchemyError as e:
+        return {"error": f"{DATABASE_ERROR}: {str(e)}", "args": e.args, "tables": []}
+
     except Exception as e:
-        print({"error": str(e), "tables": []})
+        return {"error": f"{UNEXPECTED_ERROR}: {str(e)}", "args": e.args, "tables": []}
     finally:
         session.close()
 
