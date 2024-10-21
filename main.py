@@ -22,10 +22,6 @@ def get_db() -> Session:  # получить db сессию
         db.close()
 
 
-def is_email_registered(db, email: str) -> bool:
-    return db.query(User).filter(User.email == email).first() is not None
-
-
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
