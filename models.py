@@ -58,6 +58,7 @@ class Apartment(SQLModel, table=True):
     description: str = Field()
     price_per_night: float = Field()
     location: str = Field()
+    guests_number: int = Field()
     is_available: bool = Field(default=True)
 
     # Relationship with Booking model
@@ -74,6 +75,7 @@ class Apartment(SQLModel, table=True):
             price_per_night=apartment_data.price_per_night,
             location=apartment_data.location,
             is_available=apartment_data.is_available,
+            guests_number=apartment_data.guests_number,
         )
 
         db.add(new_apartment)
@@ -82,17 +84,16 @@ class Apartment(SQLModel, table=True):
         return new_apartment
 
 
-class Booking(Base):
+class Booking(SQLModel, table=True):
     __tablename__ = "bookings"
 
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(
-        Integer, ForeignKey("users.id"), nullable=False
-    )  # ForeignKey in SQLAlchemy (and in relational databases in general) is a constraint that is used to define a relationship between two tables
-    apartment_id = Column(Integer, ForeignKey("apartments.id"), nullable=False)
-    start_date = Column(Date, nullable=False)
-    end_date = Column(Date, nullable=False)
-    total_price = Column(Float)
+    id: Optional[int] = Field(default=None, primary_key=True, index=True)
+    user_id: int = Field(foreign_key="users.id", nullable=False)
+    apartment_id: int = Field(foreign_key="apartments.id", nullable=False)
+    start_date: date = Field(nullable=False)
+    end_date: date = Field(nullable=False)
+    total_price: float = Field()
+    guests_number: int = Field()
 
     # Relationship
     # defines a one-to-many relationship between User and Booking,
