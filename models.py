@@ -104,3 +104,25 @@ class Booking(SQLModel, table=True):
     apartment = relationship(
         "Apartment", back_populates="bookings"
     )  # back_populates attribute allows the relationship to be navigated from both sides
+
+    @classmethod
+    def create_booking(cls, db: Session, booking_data: BookingCreate) -> "Booking":
+        new_booking = cls(**booking_data.model_dump())
+        db.add(new_booking)
+        db.commit()
+        db.refresh(new_booking)
+        return new_booking
+
+    @classmethod
+    def get_bookings_by_user(cls, db: Session, user_id: int) -> List["Booking"]:
+        return db.query(cls).filter(cls.user_id == user_id).all()
+
+    @classmethod
+    def get_bookings_by_apartment(
+        cls, db: Session, apartment_id: int
+    ) -> List["Booking"]:
+        return db.query(cls).filter(cls.apartment_id == apartment_id).all()
+
+    @classmethod
+    def get_booking_by_id(cls, db: Session, booking_id: int) -> "Booking":
+        return db.query(cls).filter(cls.id == booking_id).first()
