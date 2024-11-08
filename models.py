@@ -23,6 +23,9 @@ class User(SQLModel, table=True):
     address: Optional[str] = Field(max_length=100)
     phone_number: Optional[str] = Field(max_length=15)
 
+    # Relationship with Booking model
+    bookings = relationship("Booking", back_populates="user")
+
     @classmethod
     def is_email_registered(cls, db: Session, email: str) -> bool:
         return db.query(cls).filter(cls.email == email).first() is not None
@@ -57,6 +60,9 @@ class Apartment(SQLModel, table=True):
     location: str = Field()
     is_available: bool = Field(default=True)
 
+    # Relationship with Booking model
+    bookings = relationship("Booking", back_populates="apartment")
+
     @classmethod
     def create_apartment(
         cls, db: Session, apartment_data: ApartmentCreate
@@ -74,3 +80,26 @@ class Apartment(SQLModel, table=True):
         db.commit()
         db.refresh(new_apartment)
         return new_apartment
+
+
+class Booking(Base):
+    __tablename__ = "bookings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(
+        Integer, ForeignKey("users.id"), nullable=False
+    )  # ForeignKey in SQLAlchemy (and in relational databases in general) is a constraint that is used to define a relationship between two tables
+    apartment_id = Column(Integer, ForeignKey("apartments.id"), nullable=False)
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date, nullable=False)
+    total_price = Column(Float)
+
+    # Relationship
+    # defines a one-to-many relationship between User and Booking,
+    # where each booking belongs to a user and each user can have multiple bookings
+    user = relationship(
+        "User", back_populates="bookings"
+    )  # relationship function in SQLAlchemy is used to define how one model (table) is related to another
+    apartment = relationship(
+        "Apartment", back_populates="bookings"
+    )  # back_populates attribute allows the relationship to be navigated from both sides
