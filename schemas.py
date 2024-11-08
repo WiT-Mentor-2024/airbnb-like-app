@@ -1,5 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel, EmailStr
+from datetime import date
 
 
 class UserCreate(BaseModel):
@@ -62,4 +63,4 @@ class BookingResponse(BookingBase):
     apartment_id: int
 
     class Config:
-        orm_mode = True  # говорит Pydantic, что он может работать с объектами, возвращаемыми из SQLAlchemy, и преобразовывать их в формат JSON для ответа API
+        from_attributes = True  # говорит Pydantic, что он может работать с объектами, возвращаемыми из SQLAlchemy, и преобразовывать их в формат JSON для ответа API

@@ -1,11 +1,13 @@
-from typing import Optional
+from typing import Optional, List
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Relationship
+from sqlalchemy import Column, ForeignKey
 
 from pydantic import EmailStr
 from utils import hash_password
-from schemas import UserCreate, ApartmentCreate
+from schemas import UserCreate, ApartmentCreate, BookingCreate
 from sqlalchemy.orm import Session
+from datetime import date
 
 
 class User(SQLModel, table=True):
@@ -24,7 +26,7 @@ class User(SQLModel, table=True):
     phone_number: Optional[str] = Field(max_length=15)
 
     # Relationship with Booking model
-    bookings = relationship("Booking", back_populates="user")
+    bookings: List["Booking"] = Relationship(back_populates="user")
 
     @classmethod
     def is_email_registered(cls, db: Session, email: str) -> bool:
@@ -62,7 +64,7 @@ class Apartment(SQLModel, table=True):
     is_available: bool = Field(default=True)
 
     # Relationship with Booking model
-    bookings = relationship("Booking", back_populates="apartment")
+    bookings: List["Booking"] = Relationship(back_populates="apartment")
 
     @classmethod
     def create_apartment(
@@ -98,11 +100,11 @@ class Booking(SQLModel, table=True):
     # Relationship
     # defines a one-to-many relationship between User and Booking,
     # where each booking belongs to a user and each user can have multiple bookings
-    user = relationship(
-        "User", back_populates="bookings"
+    user: "User" = Relationship(
+        back_populates="bookings"
     )  # relationship function in SQLAlchemy is used to define how one model (table) is related to another
-    apartment = relationship(
-        "Apartment", back_populates="bookings"
+    apartment: "Apartment" = Relationship(
+        back_populates="bookings"
     )  # back_populates attribute allows the relationship to be navigated from both sides
 
     @classmethod
