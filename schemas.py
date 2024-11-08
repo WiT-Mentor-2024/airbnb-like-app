@@ -23,5 +23,24 @@ class UserResponse(BaseModel):
     phone_number: Optional[str]
 
 
-class Config:
-    orm_mode = True  # говорит Pydantic, что он может работать с объектами, возвращаемыми из SQLAlchemy, и преобразовывать их в формат JSON для ответа API
+class ApartmentBase(BaseModel):
+    title: str
+    description: str
+    price_per_night: float
+    location: str
+    is_available: bool = True
+
+
+class ApartmentCreate(ApartmentBase):
+    pass
+
+
+class ApartmentUpdate(ApartmentBase):
+    pass
+
+
+class ApartmentResponse(ApartmentBase):
+    id: int
+
+    class Config:
+        orm_mode = True  # говорит Pydantic, что он может работать с объектами, возвращаемыми из SQLAlchemy, и преобразовывать их в формат JSON для ответа API

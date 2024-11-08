@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel
 from database import engine
-from models import User
+from models import User, Apartment
 
 
 def create_db_and_tables():

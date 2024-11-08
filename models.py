@@ -4,7 +4,7 @@ from sqlmodel import Field, SQLModel
 
 from pydantic import EmailStr
 from utils import hash_password
-from schemas import UserCreate
+from schemas import UserCreate, ApartmentCreate
 from sqlalchemy.orm import Session
 
 
@@ -45,3 +45,32 @@ class User(SQLModel, table=True):
         db.commit()
         db.refresh(new_user)
         return new_user
+
+
+class Apartment(SQLModel, table=True):
+    __tablename__ = "apartments"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    title: str = Field(index=True)
+    description: str = Field()
+    price_per_night: float = Field()
+    location: str = Field()
+    is_available: bool = Field(default=True)
+
+    @classmethod
+    def create_apartment(
+        cls, db: Session, apartment_data: ApartmentCreate
+    ) -> "Apartment":
+
+        new_apartment = cls(
+            title=apartment_data.title,
+            description=apartment_data.description,
+            price_per_night=apartment_data.price_per_night,
+            location=apartment_data.location,
+            is_available=apartment_data.is_available,
+        )
+
+        db.add(new_apartment)
+        db.commit()
+        db.refresh(new_apartment)
+        return new_apartment
