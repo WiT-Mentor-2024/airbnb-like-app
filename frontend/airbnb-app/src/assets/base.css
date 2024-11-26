@@ -1,0 +1,76 @@
+:root {
+  --color-primary: #ff385c; /* Airbnb red */
+  --color-secondary: #00a699; /* Teal */
+  --color-contrast-primary: #484848; /* Dark gray */
+  --color-contrast-secondary: #767676; /* Medium gray */
+  --color-danger: #ff5a5f; /* Coral red */
+  --color-success: #008489; /* Deep teal */
+  --color-bg-dark: #484848; /* Dark background */
+  --color-bg-light: #ffffff; /* White */
+  --color-font-muted-light: #717171; /* Muted text */
+  --color-font-dark: #222222; /* Near black */
+  --color-font-light: #ffffff; /* White text */
+  --color-font-soft-light: #f7f7f7; /* Off white */
+
+  /* Font Variables */
+  --font-family-base: "Cereal", -apple-system, BlinkMacSystemFont,
+    "Nunito Sans", "Helvetica Neue", sans-serif;
+  --font-family-heading: "Cereal", -apple-system, BlinkMacSystemFont,
+    "Nunito Sans", "Helvetica Neue", sans-serif;
+  --font-size-base: 14px;
+  --font-size-small: 12px;
+  --font-size-large: 16px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+  --line-height-base: 1.43;
+
+  /* Spacing Variables */
+  --spacing-small: 8px;
+  --spacing-medium: 16px;
+  --spacing-large: 24px;
+  --spacing-xlarge: 32px;
+
+  /* Border Variables */
+  --border-radius: 5px;
+  --border-width: 0.5px;
+  --border-color: var(--color-bg-light);
+
+  /* Shadow Variables */
+  --box-shadow-small: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --box-shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --box-shadow-large: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --color-primary: #ff385c; /* Keep Airbnb red */
+  --color-secondary: #00a699; /* Keep teal */
+  --color-contrast-primary: #f7f7f7; /* Light gray */
+  --color-contrast-secondary: #00a699; /* Teal */
+  --color-danger: #ff5a5f; /* Coral red */
+  --color-bg-dark: #222222; /* Darker background */
+  --color-bg-light: #ffffff; /* Keep white */
+  --color-font-muted-light: #717171; /* Muted text */
+  --color-font-dark: #222222; /* Near black */
+  --color-font-light: #ffffff; /* White text */
+  --color-font-soft-light: #f7f7f7; /* Off white */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  color: var(--color-font-dark);
+  background-color: var(--color-font-light);
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
