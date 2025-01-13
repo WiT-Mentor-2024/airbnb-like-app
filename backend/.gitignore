@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.env
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Frontend
+frontend/airbnb-app/node_modules/
+frontend/airbnb-app/.next/
+frontend/airbnb-app/build/
+frontend/airbnb-app/.env.local
+frontend/airbnb-app/.env
+
+# Backend
+backend/__pycache__/
+backend/.env 
