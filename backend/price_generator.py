@@ -2,9 +2,9 @@ import time
 import random
 from sqlalchemy.orm import Session
 from models import Apartment
-from database import get_db
+from db_utils import get_db
 import threading
-from contextlib import contextmanager
+from database import SessionLocal
 
 
 def generate_random_price() -> float:
@@ -25,16 +25,21 @@ def update_prices_periodically(interval_seconds: int):
     def update_loop():
         while not stop_event.is_set():
             try:
-                with Session(get_db()) as db:
-                    apartments = db.query(Apartment).filter(Apartment.is_available == True).all()
+                db = SessionLocal()
+                try:
+                    apartments = (
+                        db.query(Apartment).filter(Apartment.is_available == True).all()
+                    )
                     for apartment in apartments:
                         new_price = generate_random_price()
                         apartment.price_per_night = new_price
                     db.commit()
                     print("Prices updated successfully")
+                finally:
+                    db.close()
             except Exception as e:
                 print(f"Error updating prices: {e}")
-            
+
             time.sleep(interval_seconds)
 
     update_thread = threading.Thread(target=update_loop, daemon=True)

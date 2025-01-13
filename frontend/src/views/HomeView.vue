@@ -1,16 +1,33 @@
 <template>
   <div class="home">
-    <div class="listings-grid">
-      <div class="listing-card" v-for="n in 6" :key="n">
+    <div v-if="loading" class="loading">Загрузка...</div>
+    <div v-else-if="error" class="error">
+      {{ error }}
+    </div>
+    <div v-else class="listings-grid">
+      <div
+        class="listing-card"
+        v-for="apartment in apartments"
+        :key="apartment.id"
+      >
         <div class="listing-image">
-          <img src="https://placehold.co/300x200" alt="Listing image" />
+          <img
+            :src="apartment.imageUrl || 'https://placehold.co/600x400'"
+            :alt="apartment.title"
+            class="listing-image"
+          />
         </div>
 
-        <PriceDisplay />
+        <PriceDisplay
+          :id="apartment.id"
+          :price_per_night="apartment.price_per_night"
+          :rating="apartment.rating"
+        />
 
         <div class="listing-info">
-          <h3>Cozy Apartment {{ n }}</h3>
-          <p>Beautiful location</p>
+          <h3>{{ apartment.title }}</h3>
+          <p>{{ apartment.location }}</p>
+          <p>{{ apartment.description }}</p>
         </div>
       </div>
     </div>
@@ -18,7 +35,25 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
 import PriceDisplay from "@/components/PriceDisplay.vue";
+import { apartmentService } from "@/services/apartmentService";
+import type { Apartment } from "@/types/apartment";
+
+const apartments = ref<Apartment[]>([]);
+const loading = ref(true);
+const error = ref<string | null>(null);
+
+onMounted(async () => {
+  try {
+    apartments.value = await apartmentService.getApartments();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_e: unknown) {
+    error.value = "Ошибка при загрузке данных";
+  } finally {
+    loading.value = false;
+  }
+});
 </script>
 
 <style scoped>
@@ -67,5 +102,16 @@ import PriceDisplay from "@/components/PriceDisplay.vue";
 .listing-info p {
   margin: 0;
   font-size: 0.9rem;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: var(--spacing-large);
+  font-size: var(--font-size-large);
+}
+
+.error {
+  color: var(--color-error);
 }
 </style>

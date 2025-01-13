@@ -31,6 +31,7 @@ class ApartmentBase(BaseModel):
     location: str
     is_available: bool = True
     guests_number: int
+    rating: float = 0.0
 
 
 class ApartmentCreate(ApartmentBase):

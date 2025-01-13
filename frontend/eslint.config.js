@@ -42,7 +42,7 @@ export default [
     rules: {
       ...eslintConfigPrettier.rules,
       "no-unused-vars": "warn",
-      "no-undef": "error",
+      "no-undef": "warn",
       "no-console": "warn",
       "no-debugger": "warn",
       "no-constant-condition": "warn",

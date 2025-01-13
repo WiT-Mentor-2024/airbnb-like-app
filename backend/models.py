@@ -62,7 +62,7 @@ class Apartment(SQLModel, table=True):
     location: str = Field()
     guests_number: int = Field()
     is_available: bool = Field(default=True)
-
+    rating: float = Field(default=0.0)
     # Relationship with Booking model
     bookings: List["Booking"] = Relationship(back_populates="apartment")
 
@@ -78,6 +78,7 @@ class Apartment(SQLModel, table=True):
             location=apartment_data.location,
             is_available=apartment_data.is_available,
             guests_number=apartment_data.guests_number,
+            rating=apartment_data.rating,
         )
 
         db.add(new_apartment)
